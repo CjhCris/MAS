@@ -1,0 +1,106 @@
+body {
+    padding-top: 70px; 
+    background: url(https:/CL/www.chileestuyo.cl/wp-content/uploads/2019/03/R%C3%ADo-Cipreses.jpg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+
+}
+
+main {
+    flex: 1;
+}
+
+
+/* Barra de Navegación */
+
+/* Transparentado */
+.navbar-light.fixed-top {
+    backdrop-filter: blur(15px) brightness(1.2); 
+    -webkit-backdrop-filter: blur(15px) brightness(1.2); 
+    background-color: rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease;
+    border-bottom: 2px solid black;
+}
+
+.navbar-light::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 1); 
+    z-index: -1; 
+    filter: blur(20px); 
+    width: 100%;  
+    height: 20%; 
+}
+
+/* Elementos */
+
+.navbar-light .nav-link {
+    color: black;
+}
+
+.navbar-light .nav-link:hover {
+    color: white; 
+    text-shadow: 
+        -1px -1px 0 black, 
+         1px -1px 0 black, 
+        -1px  1px 0 black, 
+         0.5px  1px 0 black; 
+}
+
+
+.navbar .nav-link {
+    font-weight: bold; 
+}
+
+
+/* Fin Barra de Navegación */
+
+/* Logo */
+
+.logo{
+    height: 40px;
+}
+
+/* Fin Logo */
+
+
+/* Footer */
+
+.footer {
+    background-color: #000; 
+    color: #fff; 
+    position: fixed; 
+    bottom: 0;
+    width: 100%;
+    padding: 10px 0; 
+    font-size: 14px; 
+    height: 75px;
+}
+
+/*Fin Footer*/
+
+
+/*Carrusel de Imagenes*/
+
+#carouselExampleCaptions{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.6); 
+}
+
+.carousel-item img {
+    width: 100%; 
+    height: 540px; /* Define la altura del contenedor */
+    object-fit: cover; /* Recorta automáticamente para ajustarse al contenedor */
+    object-position: 20% 35%; /* Ajusta la posición visible de la imagen */
+}
+
