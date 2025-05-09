@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from .models import PerfilUsuario
+from .models import PerfilUsuario, Infraestructura
 
 # Función para validar el formato del RUT chileno
 def calcular_dv(rut):
@@ -110,3 +110,8 @@ class CambioContrasenaForm(PasswordChangeForm):
             raise ValidationError("Las contraseñas no coinciden.")
         
         return cleaned_data
+    
+#Infraestructura Form
+
+
+

@@ -1,0 +1,164 @@
+{
+    "Región de Arica y Parinacota": {
+      "Arica": ["Arica", "Camarones"],
+      "Parinacota": ["Putre", "General Lagos"]
+    },
+    "Región de Tarapacá": {
+      "Iquique": ["Iquique", "Alto Hospicio"],
+        "Tamarugal": ["Pozo Almonte", "Camiña", "Colchane", "Huara", "Pica"]
+    },
+    "Región de Antofagasta": {
+      "Antofagasta": ["Antofagasta", "Mejillones", "Sierra Gorda", "Taltal"],
+        "El Loa": ["Calama", "San Pedro de Atacama", "Ollagüe"],
+        "Tocopilla": ["Tocopilla", "María Elena"]
+      
+    },
+    "Región de Atacama": {
+      "Copiapó": ["Copiapó", "Caldera", "Tierra Amarilla"],
+      "Chañaral": ["Chañaral", "Diego de Almagro"],
+      "Huasco": ["Huasco", "Freirina", "Vallenar", "Alto del Carmen"]
+    },
+    "Región de Coquimbo": {
+      "Elqui": ["La Serena", "Coquimbo", "Andacollo", "La Higuera", "Paiguano", "Vicuña"],
+      "Limarí": ["Ovalle", "Monte Patria", "Punitaqui", "Río Hurtado", "Combarbalá"],
+      "Choapa": ["Illapel", "Canela", "Los Vilos", "Salamanca"]
+    },
+    "Región de Valparaíso": {
+      "Valparaíso": ["Valparaíso","Casa Blanca", "Juan Fernández", "Puchuncaví", "Concón", "Quintero", "Viña del Mar"],
+      "Isla de Pascua": ["Isla de Pascua"],
+      "Los Andes": ["Los Andes", "Calle Larga", "Rinconada", "San Esteban"],
+      "Petorca": ["Petorca", "La Ligua", "Zapallar", "Papudo", "Cabildo"],
+      "Quillota": ["Quillota", "La Calera","Hijuelas", "La Cruz", "Nogales"],
+      "San Antonio": ["San Antonio", "Algarrobo", "Cartagena", "El Quisco", "El Tabo", "Santo Domingo"],
+      "San Felipe de Aconcagua": ["San Felipe", "Catemu", "Llaillay", "Panquehue", "Putaendo", "Santa María"],
+        "Marga Marga": ["Limache", "Olmué", "Quilpué", "Villa Alemana"]
+
+    },
+    "Región Metropolitana de Santiago": {
+      "Santiago": [
+        "Cerrillos", "Cerro Navia", "Conchalí", "El Bosque", "Estación Central", 
+        "Huechuraba", "Independencia", "La Cisterna", "La Florida", "La Granja", 
+        "La Pintana", "La Reina", "Las Condes", "Lo Barnechea", "Lo Espejo", 
+        "Lo Prado", "Macul", "Maipú", "Ñuñoa", "Pedro Aguirre Cerda", "Peñalolén", 
+        "Providencia", "Pudahuel", "Quilicura", "Quinta Normal", "Recoleta", 
+        "Renca", "San Joaquín", "San Miguel", "San Ramón", "Santiago", "Vitacura"
+      ],
+      "Cordillera": [
+        "Puente Alto", "Pirque", "San José de Maipo"
+      ],
+      "Chacabuco": [
+        "Colina", "Lampa", "Tiltil"
+      ],
+      "Maipo": [
+        "Buin", "Paine", "San Bernardo", "Calera de Tango"
+      ],
+      "Melipilla": [
+        "Melipilla", "Alhué", "Curacaví", "María Pinto", "San Pedro"
+      ],
+        "Talagante": [
+            "Talagante", "El Monte", "Isla de Maipo", "Padre Hurtado", "Peñaflor"
+        ]
+
+    },
+      
+
+    "Región de O'Higgins": {
+      "Cachapoal": [
+        "Rancagua", "Codegua", "Coinco", "Coltauco", "Doñihue", "Graneros", 
+        "Las Cabras", "Machalí", "Malloa", "Mostazal", "Olivar", "Peumo", 
+        "Pichidegua", "Quinta de Tilcoco", "Rengo", "Requínoa", "San Vicente"
+      ],
+        "Cardenal Caro": [
+            "Pichilemu", "La Estrella", "Litueche", "Marchihue", "Navidad", 
+            "Paredones"
+        ],
+        "Colchagua": [
+            "San Fernando", "Chépica", "Chimbarongo", "Lolol", "Nancagua", 
+            "Palmilla", "Peralillo", "Placilla", "Pumanque", "Santa Cruz"
+        ]
+      
+    },
+    "Región del Maule": {
+      "Cauquenes": [
+        "Cauquenes", "Chanco", "Pelluhue"
+      ],
+        "Curicó": [
+            "Curicó", "Hualañé", "Molina", "Rauco", "Romeral", "Teno", "Vichuquén", "Licantén", "Sagrada Familia"
+        ],
+        "Linares": [
+            "Linares", "Colbún", "Longaví", "Parral", "Retiro", "San Javier", 
+            "Villa Alegre", "Yerbas Buenas"
+        ],
+        "Talca": [
+            "Talca", "Constitución", "Curepto", "Empedrado", "Maule", "Pelarco", 
+            "Pencahue", "Río Claro", "San Clemente", "San Rafael"
+        ]
+    },
+    "Región de Ñuble": {
+      "Diguillín": [
+        "Bulnes", "Chillán", "Chillán Viejo", "El Carmen",
+        "Pemuco", "Quillón", "San Ignacio", "Yungay", "Pinto"
+      ],    
+      "Itata": [
+         "Cobquecura", "Coelemu", "Ninhue", "Portezuelo", "Quirihue",
+        "Ranquil", "Treguaco"
+      ],
+      "Punilla":
+        ["San Carlos", "Coihueco", "Ñiquén", "San Fabián", "San Nicolás"]
+    },
+    "Región de Biobío": {
+      "Arauco": [
+        "Arauco", "Cañete", "Contulmo", "Curanilahue", "Lebu", 
+        "Los Álamos", "Tirúa"
+      ],
+      "Biobío": [
+        "Antuco", "Alto Bío Bío", "Cabrero","Laja","Los Ángeles","Mulchén",
+        "Nacimiento", "Negrete", "Quilleco", "Quilaco", "San Rosendo",
+        "Santa Bárbara", "Tucapel", "Yumbel"
+      ],
+      "Concepción": [
+        "Concepción", "Coronel", "Chiguayante", "Florida", "Hualpén",
+        "Hualqui", "Lota", "Penco", "San Pedro de la Paz", 
+        "Santa Juana", "Talcahuano", "Tomé"
+      ]
+    },
+    "Región de La Araucanía": {
+      "Cautín": [
+        "Temuco", "Carahue", "Cholchol", "Cunco", "Curarrehue", "Freire", 
+        "Galvarino", "Gorbea", "Lautaro", "Loncoche", "Melipeuco", "Nueva Imperial",
+        "Padre Las Casas", "Perquenco", "Pitrufquén", "Pucón",
+        "Saavedra", "Teodoro Schmidt", "Tontén", "Vilcún", "Villarrica"
+      ],
+      "Malleco": [
+        "Angol", "Collipulli", "Curacautín", "Ercilla", "Lonquimay",
+        "Los Sauces", "Lumaco", "Purén", "Renaico", "Traiguén",
+        "Victoria"
+      ]
+    },
+    "Región de Los Ríos": {
+      "Valdivia": ["Valdivia", "Corral", "Máfil", "Mariquina", "Lanco", "Los Lagos", "Panguipulli", "Paillaco"],
+        "Ranco": ["La Unión", "Futrono", "Lago Ranco", "Río Bueno"]
+      
+    },
+    "Región de Los Lagos": {
+      "Chiloé": ["Castro", "Ancud", "Quinchao", "Dalcahue", "Puqueldón", "Queilén", "Quellón", "Quemchi", "Curaco de Vélez", "Chonchi"],
+      "Llanquihue": ["Puerto Varas", "Puerto Montt", "Calbuco", "Cochamó", "Fresia", "Frutillar", "Los Muermos", "Maullín"],
+      "Osorno": ["Osorno", "Puerto Octay", "Purranque", "Puyehue", "Río Negro", "San Juan de la Costa", "San Pablo"],
+      "Palena": ["Chaitén", "Futaleufú", "Hualaihué", "Palena"]
+    },
+    "Región de Aysén del General Carlos Ibáñez del Campo": {
+        "Aysén": ["Aysén", "Cisnes", "Guaitecas"],
+        "Capitán Prat": ["Cochrane", "O'Higgins", "Tortel"],
+        "General Carrera": ["Chile Chico", "Rio Ibañez"],
+        "Coyhaique": ["Coyhaique", "Lago Verde"]
+    },
+    "Región de Magallanes y de la Antártica Chilena": {
+      "Antártica Chilena": ["Antártica", "Cabo de Hornos"],
+        "Magallanes": ["Punta Arenas", "Laguna Blanca", "Río Verde", "San Gregorio"],
+        "Tierra del Fuego": ["Porvenir", "Primavera", "Timaukel", "Tierra del Fuego"],
+      "Puerto Williams": ["Puerto Williams", "Wulaia"],
+      "Ultima Esperanza": ["Puerto Natales", "Torres del Paine"]
+
+    }
+  }
+  

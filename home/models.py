@@ -20,55 +20,79 @@ class PerfilUsuario(models.Model):
 
     
 
+
 class Tienda(models.Model):
     codigo_eds = models.CharField(max_length=6, primary_key=True, unique=True)  
-    razon_social = models.CharField(max_length=50)
-    correo_electronico = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=15)
-    nombre_admin = models.CharField(max_length=100)
-    apellidos_admin = models.CharField(max_length=100)
-    rut_admin = models.CharField(max_length=12, unique=True)
+    razon_social = models.CharField(max_length=50)  
     codigo_empresa = models.CharField(max_length=10)  
     verificacion_sii = models.BooleanField(default=False)  
-    numero_cajeros = models.CharField(max_length=2)
+    numero_cajeros = models.PositiveSmallIntegerField()
     rut_razonsocial = models.CharField(max_length=12, unique=True)
     direccion = models.CharField(max_length=255)
     comuna = models.CharField(max_length=100)
     ciudad = models.CharField(max_length=100)
     localidad = models.CharField(max_length=100)  
     region = models.CharField(max_length=100)
-    cta_tbk = models.CharField(max_length=100, default="0")
-    tipo_eds = models.CharField(max_length=15)
+    cta_tbk = models.CharField(max_length=200, default="0")
 
-    TIPO_EDS_CHOICES = [
-        ('ASISTIDO', 'Asistido'),
-        ('MIXTA', 'Mixta'),
-        ('AUTOSERVICIO', 'Autoservicio')
-    ]
-    tipo_eds = models.CharField(max_length=15, choices=TIPO_EDS_CHOICES)
+    tipo_eds = models.CharField(max_length=15)  # Ya no tiene choices
 
-    cantidad_bano = models.CharField(max_length=1)
-    altura_mueble = models.CharField(max_length=4)  
-    generador = models.BooleanField(default=False)  
+    def __str__(self):
+        return f"{self.codigo_eds} - {self.razon_social}"
+
+
+class Administrativo(models.Model):
+    rut_admin = models.CharField(max_length=12, unique=True)
+    nombre_admin = models.CharField(max_length=100)
+    apellidos_admin = models.CharField(max_length=100)
+    telefono = models.CharField(max_length=15)
+    correo_electronico = models.EmailField(unique=True)
+    
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.nombre_admin} {self.apellidos_admin} - {self.rut_admin}"
+
+
+class Infraestructura(models.Model):
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True, blank=True)
+    altura_mueble = models.DecimalField(max_digits=5, decimal_places=2)
+    generador = models.BooleanField(default=False) 
     tipo_tienda = models.CharField(max_length=15, default="0")
-    vuelto_tienda =models.BooleanField(default=False)
+    vuelto_tienda = models.BooleanField(default=False)
     vuelto_mrc = models.BooleanField(default=False)
     pos_a80 = models.BooleanField(default=False)
+    vuelto_a80 = models.BooleanField(default=False)
+    baño_cliente = models.BooleanField(default=False)
+    cantidad_pos = models.PositiveSmallIntegerField(default=0)
+    ups_respaldo = models.BooleanField(default=False)
+    cantidad_bano = models.IntegerField(null=True, blank=True)
+
+    def __str__(self):
+        return f"Infraestructura {self.tienda.codigo_eds} - {self.tienda.razon_social}" if self.tienda else "Infraestructura sin tienda"
+
+
+class Delivery(models.Model):
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True, blank=True)
     ubereats = models.BooleanField(default=False)
     rappi = models.BooleanField(default=False)  
     pedidosya = models.BooleanField(default=False)
     justo = models.BooleanField(default=False)
-    preciodiferenciado = models.BooleanField(default=False)
-    baño_cliente = models.BooleanField(default=False)
-    cantidad_pos = models.CharField(max_length=15, default="0")
-    ups_respaldo = models.BooleanField(default=False)
-    comentarios = models.TextField(max_length=2000)  
+    preciodiferenciado = models.CharField(max_length=10, default="0")
 
     def __str__(self):
-        return f"{self.codigo_eds} - {self.razon_social}"
-    
-    
+        return f"Delivery {self.tienda.codigo_eds} - {self.tienda.razon_social}" if self.tienda else "Delivery sin tienda"
 
+
+class Comentario(models.Model):
+    contenido = models.TextField()
+    tienda = models.ForeignKey(Tienda, on_delete=models.CASCADE, null=True, blank=True)
+    
+    def __str__(self):
+        return f"Comentario de {self.contenido} en {self.tienda.codigo_eds}"
+
+
+    
 class Documento(models.Model):
     SERVICIOS = [
         ('Relevamiento', 'Relevamiento'),

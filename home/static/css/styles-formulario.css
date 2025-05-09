@@ -1,0 +1,97 @@
+.seccion-formulario {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+  }
+
+  .formulario-interno {
+    display: none;
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    background-color: #ffffff;
+  }
+
+  /* Cada bloque de campo se muestra de manera vertical y ahora posee una altura mínima obligatoria */
+  .formulario-interno .mb-3 {
+    display: block;
+    border: 1px solid #dee2e6;
+    padding: 3%;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    margin-bottom: 15px;
+    min-width: 250px;
+    min-height: 100px; /* Altura mínima obligatoria */
+  }
+
+  .formulario-interno .form-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 5px; /* Espacio entre la etiqueta y el campo */
+  }
+
+  .formulario-interno .form-control {
+    width: 100%;
+    max-width: 300px;
+    min-width: 250px;
+  }
+
+  .radio-group {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .radio-inline {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn.btn-outline-secondary:hover {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+  }
+
+
+ body {
+  background-image: url("https://wallpapers.com/images/hd/blue-mountain-b7zza9c9xejy2wpv.jpg");
+  background-repeat: no-repeat;       /* Evita que se repita */
+  background-attachment: fixed;       /* La fija en la pantalla */
+  background-size: cover;             /* Cubre todo el fondo */
+}
+
+
+#seccion-comercial{
+  background: white;
+}
+
+.btn.btn-outline-secondary {
+  background-color: white;
+  color: #084D6E; /* Cambia el color del texto si quieres */
+  border-color: #084D6E; /* Cambia el color del borde si quieres */
+}
+
+.btn.btn-outline-secondary.btn-activo {
+  background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.formulario-interno{
+  background: linear-gradient(to bottom right, lightblue 15%, #af73a3 100%);
+}
+
+.form-control{
+  background:linear-gradient(to bottom right, #e4e4e2 15%, white 100%);
+}
+
+h2{
+  color: white;
+  text-align: center;
+}

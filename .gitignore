@@ -12,3 +12,7 @@ __pycache__/
 
 # Archivos de logs
 *.log
+
+home/credentials
+
+home/google_services.py

@@ -1,0 +1,111 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Drive - Carpetas y Hojas de Cálculo</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'css/styles-drive.css' %}">
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-transparent">
+    <div class="container-fluid">
+        <!-- Elementos alineados al inicio -->
+        <ul class="navbar-nav me-auto">
+            <li class="nav-item">
+                <img class="logo" src="{% static '/img/Logo.png' %}" alt="Descripción de la imagen">
+
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="{% url 'home' %}">Inicio</a>
+                
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Servicios</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Nosotros</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Misión/Visión</a>
+            </li>
+        </ul>
+
+        <!-- Elementos alineados al final -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Contacto</a>
+            </li>
+        </ul>
+    </div>
+  </nav>
+
+    <div class="container my-4">
+        <!-- Sección de Carpetas -->
+        <h2>📁 Carpetas</h2><br>
+        <div class="row">
+            {% for folder in folders|dictsort:"name" %}
+                <div class="col-12 col-md-4 mb-3">
+                    <a href="{% url 'navegar_drive' folder.id %}" class="btn btn-outline-primary w-100 d-flex flex-column align-items-center text-center">
+                        <i class="bi bi-folder fs-1 mb-2"></i> <!-- Icono de carpeta grande -->
+                        <span>{{ folder.name }}</span> <!-- Nombre debajo del icono -->
+                    </a>
+                </div>
+            {% empty %}
+                <div class="alert alert-warning" role="alert">
+                    No hay subcarpetas.
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sección de Hojas de Cálculo -->
+        <h2>📄 Documentos</h2><br>
+        <div class="row">
+            {% for sheet in sheets|dictsort:"name" %}
+                <div class="col-12 col-md-4 mb-3">
+                    {% if "Libro de Tienda" in sheet.name %}
+                        <!-- Si el nombre contiene "Libro de Tienda", redirigir al formulario -->
+                        <a href="{% url 'formulario_tienda' sheet.id %}" class="btn btn-outline-success w-100 d-flex flex-column align-items-center text-center">
+                            <i class="bi bi-file-earmark-excel fs-1 mb-2"></i> <!-- Icono de Excel grande -->
+                            <span>{{ sheet.name }}</span> <!-- Nombre debajo del icono -->
+                        </a>
+                    {% else %}
+                        <!-- Si no contiene "Libro de Tienda", abrir en Google Sheets -->
+                        <a href="https://docs.google.com/spreadsheets/d/{{ sheet.id }}" target="_blank" class="btn btn-outline-success w-100 d-flex flex-column align-items-center text-center">
+                            <i class="bi bi-file-earmark-excel fs-1 mb-2"></i> <!-- Icono de Excel grande -->
+                            <span>{{ sheet.name }}</span> <!-- Nombre debajo del icono -->
+                        </a>
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="alert alert-warning" role="alert">
+                    No hay hojas de cálculo.
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón para volver a la raíz -->
+        {% if folder_id %}
+            <a href="{% url 'navegar_drive' %}" class="btn btn-secondary mt-3">⬅ Volver a raíz</a>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS (opcional para algunos componentes como modales, tooltips, etc.) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <footer class="footer bg-dark text-white text-center py-3">
+      <p class="mb-0">© 2024 Todos los derechos reservados.</p>
+      <p class="mb-0">Multi Asesorias</p>
+  </footer>
+
+</body>
+</html>

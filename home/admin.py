@@ -14,12 +14,96 @@ class DocumentoAdmin(admin.ModelAdmin):
     list_per_page = 10  
 
 
+from django.contrib import admin
+from .models import Tienda, Administrativo, Infraestructura, Delivery, Comentario
+
+# Inlines para datos relacionados con Tienda
+
+class AdministrativoInline(admin.TabularInline):
+    model = Administrativo
+    extra = 0
+    fields = (
+        'rut_admin',
+        'nombre_admin',
+        'apellidos_admin',
+        'telefono',
+        'correo_electronico',
+    )
+    verbose_name = "Administrativo"
+    verbose_name_plural = "Administrativos"
+
+
+class InfraestructuraInline(admin.TabularInline):
+    model = Infraestructura
+    extra = 0
+    fields = (
+        'cantidad_bano',
+        'altura_mueble',
+        'generador',
+        'tipo_tienda',
+        'vuelto_tienda',
+        'vuelto_mrc',
+        'pos_a80',
+        'baño_cliente',
+        'cantidad_pos',
+        'ups_respaldo',
+    )
+    verbose_name = "Infraestructura"
+    verbose_name_plural = "Infraestructuras"
+
+
+class DeliveryInline(admin.TabularInline):
+    model = Delivery
+    extra = 0
+    fields = (
+        'ubereats',
+        'rappi',
+        'pedidosya',
+        'justo',
+        'preciodiferenciado',
+    )
+    verbose_name = "Delivery"
+    verbose_name_plural = "Deliverys"
+
+
+# Admin principal para Tienda
+
 @admin.register(Tienda)
 class TiendaAdmin(admin.ModelAdmin):
-    list_display = ('codigo_eds', 'razon_social', 'correo_electronico', 'telefono', 'nombre_admin', 'numero_cajeros', 'comuna', 'ciudad', 'region', 'cta_tbk', 'tipo_eds', 'tipo_tienda', 'vuelto_tienda', 'vuelto_mrc', 'pos_a80', 'ubereats', 'rappi', 'pedidosya', 'justo', 'preciodiferenciado', 'baño_cliente', 'cantidad_pos', 'ups_respaldo')
-    search_fields = ('codigo_eds', 'razon_social', 'correo_electronico', 'nombre_admin')
+    list_display = (
+        'codigo_eds',
+        'razon_social',
+        'numero_cajeros',
+        'comuna',
+        'ciudad',
+        'region',
+        'cta_tbk',
+        'tipo_eds',
+        'verificacion_sii',
+    )
+    search_fields = ('codigo_eds', 'razon_social')
     list_filter = ('tipo_eds', 'region', 'verificacion_sii')
     ordering = ('razon_social',)
+
+    inlines = (
+        AdministrativoInline,
+        InfraestructuraInline,
+        DeliveryInline,
+    )
+
+
+# Admin separado para Comentario
+
+@admin.register(Comentario)
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = (
+        'contenido',
+        
+    )
+    
+
+
+
 
 
 class RelevamientoMediaAdmin(admin.ModelAdmin):

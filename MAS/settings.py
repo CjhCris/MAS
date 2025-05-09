@@ -134,6 +134,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_URL = 'login'  # Esto debe coincidir con el nombre de la URL de login que definiste en urls.py
 LOGIN_REDIRECT_URL = 'cambiar_contrasena'  # Después de iniciar sesión, se redirige a cambiar_contrasena
 
+import os
 
+GOOGLE_DRIVE_CREDENTIALS = os.path.join(BASE_DIR, 'home', 'credentials', 'drive_service.json')
 
 

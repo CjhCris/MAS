@@ -1,0 +1,1121 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Libro de Tienda</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/styles-formulario.css' %}">
+  <script async defer src="https://apis.google.com/js/api.js"></script>
+
+</head>
+
+  
+<body>
+  
+  <form id="formulario">
+    <input type="hidden" id="sheet-id" name="sheet_id">
+</form>
+
+<script>
+    const SHEET_ID = "{{ sheet_id }}";  // Recibe el ID de la hoja desde la vista
+</script>
+
+
+<div class="container mt-5">
+  <h2 class="mb-4">Libro de Tienda</h2>
+
+  <!-- Botones principales -->
+  <div class="d-grid gap-3">
+    <!-- Datos Comerciales -->
+    <button class="btn btn-secondary" onclick="toggleSeccion('comercial')">Datos Comerciales</button>
+    <div id="seccion-comercial" class="seccion-formulario">
+        
+      <!-- Botón y formulario interno: Datos de Tienda -->
+      <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-tienda')">
+        Datos de Tienda
+      </button>
+      <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-admin')">
+        Datos del Administrativo
+      </button>
+      <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-infraestructura')">
+        Infraestructura de Tienda
+      </button>
+      <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-otros-servicios')">
+      Otros Servicios
+    </button>
+      <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-pago')">
+        Medios de Pago
+    </button>
+    
+    <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-avances-caja')">
+      Tipos de Avance por Caja
+    </button>
+    <button class="btn btn-outline-secondary" onclick="toggleFormulario('form-datos-finales')">
+      Datos Finales
+    </button>
+
+      <div id="form-admin" class="formulario-interno">
+        <form id="formulario-admin" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <!-- Columna 1 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label for="rut_admin" class="form-label">Rut del Encargado/Concesionario</label>
+                <input type="text" class="form-control" id="rut_admin" name="rut_admin">
+              </div>
+              <div class="mb-3">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input type="text" class="form-control" id="telefono" name="telefono">
+              </div>
+            </div>
+            <!-- Columna 2 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label for="nombre_admin" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="nombre_admin" name="nombre_admin">
+              </div> 
+              <div class="mb-3">
+                <label for="correo" class="form-label">Correo Electrónico</label>
+                <input type="email" class="form-control" id="correo" name="correo">
+              </div>
+            </div>
+            <!-- Columna 3 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label for="apellido_admin" class="form-label">Apellido</label>
+                <input type="text" class="form-control" id="apellido_admin" name="apellido_admin">
+              </div>  
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+
+      
+
+      <div id="form-tienda" class="formulario-interno">
+        <form id="formulario-tienda" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <!-- Columna 1 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label for="codigo_eds" class="form-label">Código EDS</label>
+                <input type="text" class="form-control" id="codigo_eds" name="codigo_eds">
+              </div>
+              <div class="mb-3">
+                <label for="razon_social" class="form-label">Id Externo de la cuenta (Razón social)</label>
+                <input type="text" class="form-control" id="razon_social" name="razon_social">
+              </div>
+              <div class="mb-3">
+                <label for="cuenta_tbk" class="form-label">Cuenta Corriente Transbank</label>
+                <input type="text" class="form-control" id="cuenta_tbk" name="cuenta_tbk">
+              </div>
+              <div class="mb-3">
+                <label for="region" class="form-label">Región</label>
+                <select class="form-select" id="region" name="region">
+                    <option value="" disabled selected>Selecciona una región</option>
+                    <!-- Opciones de Región aquí -->
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="localidad" class="form-label">Localidad</label>
+                <input type="text" class="form-control" id="localidad" name="localidad">
+              </div>
+              <!-- Tienda 24hrs -->
+              <div class="mb-3">
+                <label for="tienda_24hrs" class="form-label">Tienda 24hrs</label>
+                <div class="d-flex gap-2">
+                    <select class="form-select" id="tienda_24hrs" name="tienda_24hrs" onchange="toggleFields()">
+                        <option value="NO">No</option>
+                        <option value="SI">Sí</option>
+                    </select>
+                </div>
+            </div>
+              
+              <!-- Pagos Nocturnos-->
+              <div class="mb-3" id="pagos_noche" >
+                    <label for="pagos_noche" class="form-label">Cómo realiza pagos en la noche</label>
+                    <div class="d-flex gap-2">
+                        <input type="text" class="form-control" id="pagos_noche" name="pagos_noche" value="-">
+                    </div>
+                </div>
+        </div>
+
+              
+            
+
+            <!-- Columna 2 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Código Empresa</label>
+                <div class="radio-group">
+                  <div class="radio-inline">
+                    <input type="radio" id="codigo_empresa_pronto" name="codigo_empresa" value="Pronto">
+                    <label for="codigo_empresa_pronto" class="form-label">Pronto</label>
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" id="codigo_empresa_punto" name="codigo_empresa" value="Punto">
+                    <label for="codigo_empresa_punto" class="form-label">Punto</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">¿Está verificada la actividad Económica del SII?</label>
+                <div class="radio-group">
+                  <div class="radio-inline">
+                    <input type="radio" id="verificacion_sii_si" name="verificacion_sii" value="SI">
+                    <label for="verificacion_sii_si" class="form-label">Sí</label>
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" id="verificacion_sii_no" name="verificacion_sii" value="NO">
+                    <label for="verificacion_sii_no" class="form-label">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="numero_cajeros" class="form-label">Número de Cajeros/Atendedores</label>
+                <input type="text" class="form-control" id="numero_cajeros" name="numero_cajeros">
+              </div>
+              <div class="mb-3">
+                <label for="ciudad" class="form-label">Ciudad</label>
+                <select class="form-select" id="ciudad" name="ciudad" disabled>
+                  <option value="" disabled selected>Selecciona una ciudad</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="horarios_turno" class="form-label">Horarios / Cambios de Turno</label>
+                <input type="text" class="form-control" id="horarios_turno" name="horarios_turno" placeholder="Ejemplo: 08:00 - 16:00 / 16:00 - 00:00">
+              </div>
+
+              <!-- Opera con puerta de seguridad cerrada -->
+              <div class="mb-3" id="puerta_seguridad" >
+                <label for="puerta_seguridad_cerrada" class="form-label">Opera con puerta de seguridad cerrada</label>
+                <div class="d-flex gap-2">
+                    <select class="form-select" id="puerta_seguridad_cerrada" name="puerta_seguridad_cerrada">
+                        <option value="-">No</option>
+                        <option value="SI">Sí</option>
+                    </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Columna 3 -->
+            <div class="col-12 col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Tipo de Estación de Servicio</label>
+                <div class="radio-group">
+                  <div class="radio-inline">
+                    <input type="radio" id="tipo_eds_asistido" name="tipo_eds" value="ASISTIDO">
+                    <label for="tipo_eds_asistido" class="form-label">ASISTIDO</label>
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" id="tipo_eds_autoservicio" name="tipo_eds" value="AUTOSERVICIO">
+                    <label for="tipo_eds_autoservicio" class="form-label">AUTOSERVICIO</label>
+                  </div>
+                  <div class="radio-inline">
+                    <input type="radio" id="tipo_eds_misto" name="tipo_eds" value="MIXTO">
+                    <label for="tipo_eds_misto" class="form-label">MIXTO</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="rut_razonsocial" class="form-label">Rut Razon Social</label>
+                <input type="text" class="form-control" id="rut_razonsocial" name="rut_razonsocial">
+              </div>
+              <div class="mb-3">
+                <label for="direccion" class="form-label">Dirección</label>
+                <input type="text" class="form-control" id="direccion" name="direccion">
+              </div>
+
+              <div class="mb-3">
+                <label for="comuna" class="form-label">Comuna</label>
+                <select class="form-select" id="comuna" name="comuna" disabled>
+                  <option value="" disabled selected>Selecciona una comuna</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="personal_turno" class="form-label">Número de Personal por Turno</label>
+                <input type="text" class="form-control" id="personal_turno" name="personal_turno" placeholder="Ejemplo: 2-3-4">
+              </div>
+              
+              <!-- Distancia de caja hacia la puerta -->
+              <div class="mb-3" id="distancia_caja">
+                <label for="distancia_caja_puerta" class="form-label">Distancia de caja hacia la puerta</label>
+                <div class="d-flex gap-2">
+                    <input type="text" class="form-control" id="distancia_caja_puerta" name="distancia_caja_puerta" value="-">
+                </div>
+            </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+
+
+
+            
+
+          </div>
+        </form>
+      </div>
+
+      
+      
+      <div id="form-infraestructura" class="formulario-interno" style="display: none;">
+        <form id="formulario-infraestructura" method="post">
+          {% csrf_token %}
+          <div class="row">
+            <!-- Columna 1 -->
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="tipo_tienda" class="form-label">Tipo de Tienda</label>
+                <select class="form-control" id="tipo_tienda" name="tipo_tienda" onchange="mostrarCampoOtro(this)">
+                  <option value="">Seleccione...</option>
+                  <option value="PUNTO">PUNTO</option>
+                  <option value="PRONTO">PRONTO</option>
+                  <option value="FRESCO">FRESCO</option>
+                  <option value="OTRO">OTRO</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="altura_mueble" class="form-label">Altura del Mesón</label>
+                <input type="number" class="form-control" id="altura_mueble" name="altura_mueble" step="0.01" placeholder="Ingrese la altura en centímetros">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">¿POS A80 habilitado para vuelto en Zervo?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="pos_a80_si" name="pos_a80" value="SI">
+                    <label class="form-check-label" for="pos_a80_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="pos_a80_no" name="pos_a80" value="NO">
+                    <label class="form-check-label" for="pos_a80_no">No</label>
+                  </div>
+                </div>
+              </div> 
+              
+              <div class="mb-3">
+                <label for="bano_cliente" class="form-label">¿Hay Baño para Clientes?</label>
+                <select class="form-select" id="bano_cliente" name="bano_cliente" onchange="mostrarPreguntaCobroSelect(this)">
+                    <option value="" selected>Seleccione...</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+
+            <div id="metodo_pago_bano" class="mb-3" style="display: none;">
+              <label for="metodo_pago" class="form-label">Método de Pago del Baño</label>
+              <select class="form-select" id="metodo_pago" name="metodo_pago">
+                  <option value="">Seleccione...</option>
+                  <option value="efectivo">Efectivo</option>
+                  <option value="mrc">MRC</option>
+              </select>
+          </div>
+              
+              
+
+            
+              
+              
+              
+            </div>
+      
+            <!-- Columna 2 -->
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label for="cantidad_pos" class="form-label">Cantidad de POS en Tienda</label>
+                <input type="number" class="form-control" id="cantidad_pos" name="cantidad_pos" min="0" placeholder="Ingrese la cantidad de POS">
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Hay Vuelto del Zervo en Tienda?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="vuelto_tienda_si" name="vuelto_tienda" value="SI">
+                    <label class="form-check-label" for="vuelto_tienda_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="vuelto_tienda_no" name="vuelto_tienda" value="NO">
+                    <label class="form-check-label" for="vuelto_tienda_no">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Posee Generador?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="generador_si" name="generador" value="SI">
+                    <label class="form-check-label" for="generador_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="generador_no" name="generador" value="NO">
+                    <label class="form-check-label" for="generador_no">No</label>
+                  </div>
+                </div>
+              </div>
+
+              <div id="pregunta_cobro_bano" class="mb-3" style="display: none;">
+                <label for="cobro_bano" class="form-label">¿Se cobrará por el uso del baño?</label>
+                <select class="form-select" id="cobro_bano" name="cobro_bano" onchange="mostrarMontoCobroBano(this)">
+                    <option value="">Seleccione...</option>
+                    <option value="SI">Sí</option>
+                    <option value="NO">No</option>
+                </select>
+            </div>
+
+            <div id="metodo_apertura_bano" class="mb-3" style="display: none;">
+                <label for="metodo_apertura" class="form-label">Método de Apertura del Baño</label>
+                <select class="form-select" id="metodo_apertura" name="metodo_apertura" onchange="mostrarCampoOtroApertura(this)">
+                    <option value="">Seleccione...</option>
+                    <option value="llave">Llave</option>
+                    <option value="ticket">Ticketera</option>
+                    <option value="boton">Botonera</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+              
+              
+            
+
+            
+        
+              
+            </div>
+      
+            <!-- Columna 3 -->
+            <div class="col-md-4">
+              <div class="mb-3">
+                <label class="form-label">Posee POS A80?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="pos_a80_si" name="pos_a80" value="SI">
+                    <label class="form-check-label" for="pos_a80_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="pos_a80_no" name="pos_a80" value="NO">
+                    <label class="form-check-label" for="pos_a80_no">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Hay Vuelto del Zervo por MRC?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="vuelto_mrc_si" name="vuelto_mrc" value="SI">
+                    <label class="form-check-label" for="vuelto_mrc_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="vuelto_mrc_no" name="vuelto_mrc" value="NO">
+                    <label class="form-check-label" for="vuelto_mrc_no">No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Posee UPS de Respaldo para MRC ?</label>
+                <div class="d-flex">
+                  <div class="form-check me-3">
+                    <input type="radio" class="form-check-input" id="ups_respaldo_si" name="ups_respaldo" value="SI">
+                    <label class="form-check-label" for="ups_respaldo_si">Sí</label>
+                  </div>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" id="ups_respaldo_no" name="ups_respaldo" value="NO">
+                    <label class="form-check-label" for="ups_respaldo_no">No</label>
+                  </div>
+                </div>
+              </div>
+
+              <div id="monto_cobro_bano" class="mb-3" style="display: none;">
+                <label for="monto_bano" class="form-label">Monto que se cobra por el Baño</label>
+                <input type="number" class="form-control" id="monto_bano" name="monto_bano" placeholder="Ingrese el monto">
+            </div>
+              
+              <div id="metodo_apertura_otro" class="mb-3" style="display: none;">
+              <label for="metodo_apertura_detalle" class="form-label">Especificar el Método de Apertura</label>
+              <input type="text" class="form-control" id="metodo_apertura_detalle" name="metodo_apertura_detalle" placeholder="Especifique el método de apertura">
+          </div>
+              
+              <!-- Pregunta condicional para el cobro del baño -->
+              
+
+              
+            </div>
+          </div>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+          </div>
+        </form>
+      </div>
+      
+      
+    
+    <div id="form-pago" class="formulario-interno" style="display: none;">
+      <form>
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-md-4">
+            <!-- Efectivo -->
+            <div class="mb-3">
+              <label for="efectivo" class="form-label">Efectivo</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="efectivo_si" name="efectivo" value="si">
+                <label for="efectivo_si">Sí</label>
+                <input type="radio" id="efectivo_no" name="efectivo" value="no">
+                <label for="efectivo_no">No</label>
+              </div>
+            </div>
+    
+           
+    
+      
+    
+            <!-- Casas Comerciales -->
+            <div class="mb-3">
+              <label for="casas_comerciales" class="form-label">Casas Comerciales</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="casas_comerciales_si" name="casas_comerciales" value="si">
+                <label for="casas_comerciales_si">Sí</label>
+                <input type="radio" id="casas_comerciales_no" name="casas_comerciales" value="no">
+                <label for="casas_comerciales_no">No</label>
+              </div>
+            </div>
+
+            <!-- Adquirente -->
+            <div class="mb-3">
+              <label for="adquirente" class="form-label">Adquirente</label>
+              <select class="form-select" id="adquirente" name="adquirente" onchange="mostrarCampoOtro()">
+                <option value="transbank">Transbank</option>
+                <option value="klapp">Klapp</option>
+                <option value="getnet">Getnet</option>
+                <option value="multicaja">Multicaja</option>
+                <option value="otro">Otro</option>
+              </select>
+            </div>
+          </div>
+    
+          <!-- Columna 2 -->
+          <div class="col-md-4">
+          
+            <!-- Copec APP -->
+            <div class="mb-3">
+              <label for="copec_app" class="form-label">Copec APP</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="copec_app_si" name="copec_app" value="si">
+                <label for="copec_app_si">Sí</label>
+                <input type="radio" id="copec_app_no" name="copec_app" value="no">
+                <label for="copec_app_no">No</label>
+              </div>
+            </div>
+            
+    
+            <!-- Cheque Restorante, Amipass, Sodexo, Otro -->
+            <div class="mb-3">
+              <label for="cheque_restaurante" class="form-label">Cheque Restorante, Amipass, Sodexo, Otro</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="cheque_restaurante_si" name="cheque_restaurante" value="si">
+                <label for="cheque_restaurante_si">Sí</label>
+                <input type="radio" id="cheque_restaurante_no" name="cheque_restaurante" value="no">
+                <label for="cheque_restaurante_no">No</label>
+              </div>
+            </div>
+    
+            <div class="mb-3" id="campoOtro" style="display: none;">
+              <label for="otroAdquirente" class="form-label">¿Cuál?</label>
+              <input type="text" class="form-control" id="otroAdquirente" name="otroAdquirente" placeholder="Ingrese el nombre del adquirente">
+            </div>
+          </div>
+
+    
+          <!-- Columna 3 -->
+          <div class="col-md-4">
+            <!-- ProntoApp -->
+            <div class="mb-3">
+              <label for="prontoapp" class="form-label">ProntoApp</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="prontoapp_si" name="prontoapp" value="si">
+                <label for="prontoapp_si">Sí</label>  
+                <input type="radio" id="prontoapp_no" name="prontoapp" value="no">
+                <label for="prontoapp_no">No</label>
+              </div>
+            </div>
+
+            <!-- Mercado Pago -->
+            <div class="mb-3">
+              <label for="mercado_pago" class="form-label">Mercado Pago</label>
+              <div class="d-flex gap-2">
+                <input type="radio" id="mercado_pago_si" name="mercado_pago" value="si">
+                <label for="mercado_pago_si">Sí</label>
+                <input type="radio" id="mercado_pago_no" name="mercado_pago" value="no">
+                <label for="mercado_pago_no">No</label>
+              </div>
+            </div>
+            
+            
+    
+            
+    
+            
+          </div>
+        </div>
+    
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+          <button type="button" class="btn btn-success" disabled>Guardar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Botón Otros Servicios -->
+    
+
+    <!-- Formulario Otros Servicios -->
+    <div id="form-otros-servicios" class="formulario-interno" style="display: none;">
+      <form>
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-12 col-md-4">
+            <!-- Duchas / TCT -->
+            <div class="mb-3">
+              <label for="duchas_tct" class="form-label">Duchas / TCT</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="duchas_tct_si" name="duchas_tct" value="si">
+                  <label for="duchas_tct_si" class="form-label">Sí</label>
+                </div>
+                
+                  <div class="radio-inline">
+                    <input type="radio" id="duchas_tct_no" name="duchas_tct" value="no">
+                    <label for="duchas_tct_no" class="form-label">No</label>
+                  </div>
+              </div>
+            </div>
+
+            <!-- Pedidos Ya -->
+            <div class="mb-3">
+              <label for="pedidos_ya" class="form-label">Pedidos Ya</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="pedidos_ya_si" name="pedidos_ya" value="si">
+                  <label for="pedidos_ya_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="pedidos_ya_no" name="pedidos_ya" value="no">
+                  <label for="pedidos_ya_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+            <!-- Rappi u Otro -->
+            <div class="mb-3">
+              <label for="rappi_otros" class="form-label">Rappi u Otro</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="rappi_otros_si" name="rappi_otros" value="si">
+                  <label for="rappi_otros_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="rappi_otros_no" name="rappi_otros" value="no">
+                  <label for="rappi_otros_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna 2 -->
+          <div class="col-12 col-md-4">
+            <!-- Pago de Servicios -->
+            <div class="mb-3">
+              <label for="pago_servicios" class="form-label">Pago de Servicios (Luz, agua, gas, etc.)</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="pago_servicios_si" name="pago_servicios" value="si">
+                  <label for="pago_servicios_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="pago_servicios_no" name="pago_servicios" value="no">
+                  <label for="pago_servicios_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- UberEats -->
+            <div class="mb-3">
+              <label for="ubereats" class="form-label">UberEats</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="ubereats_si" name="ubereats" value="si">
+                  <label for="ubereats_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="ubereats_no" name="ubereats" value="no">
+                  <label for="ubereats_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Precio Diferenciado para Delivery-->
+            <div class="mb-3">
+                <label for="precio_diferenciado" class="form-label">Hay precio diferenciado para Delivery?</label>
+                <input type="text" class="form-control" id="precio_diferenciado" name="precio_diferenciado"  placeholder="Sí/No u Otro">
+              </div>
+            
+
+            
+          </div>
+
+          <!-- Columna 3 -->
+          <div class="col-12 col-md-4">
+            <!-- Pago autopistas / Pase Diario -->
+            <div class="mb-3">
+              <label for="pago_autopistas" class="form-label">Pago autopistas / Pase Diario</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="pago_autopistas_si" name="pago_autopistas" value="si">
+                  <label for="pago_autopistas_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="pago_autopistas_no" name="pago_autopistas" value="no">
+                  <label for="pago_autopistas_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+            <!-- Justo -->
+            <div class="mb-3">
+              <label for="justo" class="form-label">Justo</label>
+              <div class="radio-group">
+                
+                <div class="radio-inline">
+                  <input type="radio" id="justo_si" name="justo" value="si">
+                  <label for="justo_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="justo_no" name="justo" value="no">
+                  <label for="justo_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+          <button type="button" class="btn btn-success" disabled>Guardar</button>
+        </div>
+      </form>
+    </div>
+
+    
+
+    <!-- Formulario Tipos de Avance por Caja -->
+    <div id="form-avances-caja" class="formulario-interno" style="display: none;">
+      <form>
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-12 col-md-4">
+            <!-- Avance Efectivo -->
+            <div class="mb-3">
+              <label for="avance_efectivo" class="form-label">Avance Efectivo</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="avance_efectivo_no" name="avance_efectivo" value="no">
+                  <label for="avance_efectivo_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="avance_efectivo_si" name="avance_efectivo" value="si">
+                  <label for="avance_efectivo_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Faltante Efectivo -->
+            <div class="mb-3">
+              <label for="faltante_efectivo" class="form-label">Faltante Efectivo</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="faltante_efectivo_no" name="faltante_efectivo" value="no">
+                  <label for="faltante_efectivo_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="faltante_efectivo_si" name="faltante_efectivo" value="si">
+                  <label for="faltante_efectivo_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Terminal Inalambrico -->
+            <div class="mb-3">
+              <label for="terminal_inalambrico" class="form-label">Terminal Inalambrico</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="terminal_inalambrico_no" name="terminal_inalambrico" value="no">
+                  <label for="terminal_inalambrico_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="terminal_inalambrico_si" name="terminal_inalambrico" value="si">
+                  <label for="terminal_inalambrico_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sobrante Efectivo -->
+            <div class="mb-3">
+              <label for="sobrante_efectivo" class="form-label">Sobrante Efectivo</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="sobrante_efectivo_no" name="sobrante_efectivo" value="no">
+                  <label for="sobrante_efectivo_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="sobrante_efectivo_si" name="sobrante_efectivo" value="si">
+                  <label for="sobrante_efectivo_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna 2 -->
+          <div class="col-12 col-md-4">
+            <!-- Salida Efectivo por Anulación -->
+            <div class="mb-3">
+              <label for="salida_efectivo_anulacion" class="form-label">Salida Efectivo por Anulación</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="salida_efectivo_anulacion_no" name="salida_efectivo_anulacion" value="no">
+                  <label for="salida_efectivo_anulacion_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="salida_efectivo_anulacion_si" name="salida_efectivo_anulacion" value="si">
+                  <label for="salida_efectivo_anulacion_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Ingreso Efectivo Inicial -->
+            <div class="mb-3">
+              <label for="ingreso_efectivo_inicial" class="form-label">Ingreso Efectivo Inicial</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="ingreso_efectivo_inicial_no" name="ingreso_efectivo_inicial" value="no">
+                  <label for="ingreso_efectivo_inicial_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="ingreso_efectivo_inicial_si" name="ingreso_efectivo_inicial" value="si">
+                  <label for="ingreso_efectivo_inicial_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Vuelto Zervo -->
+            <div class="mb-3">
+              <label for="vuelto_zerro" class="form-label">Vuelto Zervo</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="vuelto_zerro_no" name="vuelto_zerro" value="no">
+                  <label for="vuelto_zerro_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="vuelto_zerro_si" name="vuelto_zerro" value="si">
+                  <label for="vuelto_zerro_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Colación -->
+            <div class="mb-3">
+              <label for="colacion" class="form-label">Colación</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="colacion_no" name="colacion" value="no">
+                  <label for="colacion_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="colacion_si" name="colacion" value="si">
+                  <label for="colacion_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna 3 -->
+          <div class="col-12 col-md-4">
+            <!-- Gastos Oficina -->
+            <div class="mb-3">
+              <label for="gastos_oficina" class="form-label">Gastos Oficina</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="gastos_oficina_no" name="gastos_oficina" value="no">
+                  <label for="gastos_oficina_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="gastos_oficina_si" name="gastos_oficina" value="si">
+                  <label for="gastos_oficina_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Efectivo Billetes -->
+            <div class="mb-3">
+              <label for="efectivo_billetes" class="form-label">Efectivo Billetes</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="efectivo_billetes_no" name="efectivo_billetes" value="no">
+                  <label for="efectivo_billetes_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="efectivo_billetes_si" name="efectivo_billetes" value="si">
+                  <label for="efectivo_billetes_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Efectivo Monedas -->
+            <div class="mb-3">
+              <label for="efectivo_monedas" class="form-label">Efectivo Monedas</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="efectivo_monedas_no" name="efectivo_monedas" value="no">
+                  <label for="efectivo_monedas_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="efectivo_monedas_si" name="efectivo_monedas" value="si">
+                  <label for="efectivo_monedas_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pago de Facturas -->
+            <div class="mb-3">
+              <label for="pago_facturas" class="form-label">Pago de Facturas</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="pago_facturas_no" name="pago_facturas" value="no">
+                  <label for="pago_facturas_no" class="form-label">No</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="pago_facturas_si" name="pago_facturas" value="si">
+                  <label for="pago_facturas_si" class="form-label">Sí</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+          <button type="button" class="btn btn-success" disabled>Guardar</button>
+        </div>
+      </form>
+    </div>
+        
+  
+
+    <!-- Formulario Datos Finales -->
+    <div id="form-datos-finales" class="formulario-interno" style="display: none;">
+      <form>
+        <div class="row">
+          <!-- Columna 1 -->
+          <div class="col-12 col-md-4">
+            <!-- Posee MR Comanda -->
+            <div class="mb-3">
+              <label for="mr_comanda" class="form-label">¿Posee MR Comanda?</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="mr_comanda_si" name="mr_comanda" value="si">
+                  <label for="mr_comanda_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="mr_comanda_no" name="mr_comanda" value="no">
+                  <label for="mr_comanda_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comandas -->
+            <div class="mb-3">
+              <label for="comandas" class="form-label">¿Cuántas Comandas posee?</label>
+              <select class="form-select" id="comandas" name="comandas">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+            
+            <!-- ¿Posee wifi Cliente? -->
+            <div class="mb-3">
+              <label for="wifi_cliente" class="form-label">¿Posee wifi Cliente?</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_cliente_si" name="wifi_cliente" value="si" onchange="toggleSelect('ap_wifi_cliente', true)">
+                  <label for="wifi_cliente_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_cliente_no" name="wifi_cliente" value="no" onchange="toggleSelect('ap_wifi_cliente', false)">
+                  <label for="wifi_cliente_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- AP Wifi Fuera Tienda -->
+            <div class="mb-3">
+              <label for="ap_wifi_fuera" class="form-label">¿Cuántos Access Point posee (fuera tienda)?</label>
+              <select class="form-select" id="ap_wifi_fuera" name="ap_wifi_fuera" disabled>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            
+
+           
+          </div>
+
+          <!-- Columna 2 -->
+          <div class="col-12 col-md-4">
+            <!-- POS Autoservicios -->
+            <div class="mb-3">
+              <label for="pos_autoservicio" class="form-label">¿Cuántos POS Autoservicios posee?</label>
+              <select class="form-select" id="pos_autoservicio" name="pos_autoservicio">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            
+            <!-- ¿Posee wifi uso tienda? -->
+            <div class="mb-3">
+              <label for="wifi_tienda" class="form-label">¿Posee wifi uso tienda?</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_tienda_si" name="wifi_tienda" value="si" onchange="toggleSelect('ap_wifi_tienda', true)">
+                  <label for="wifi_tienda_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_tienda_no" name="wifi_tienda" value="no" onchange="toggleSelect('ap_wifi_tienda', false)">
+                  <label for="wifi_tienda_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- AP Wifi Cliente -->
+            <div class="mb-3">
+              <label for="ap_wifi_cliente" class="form-label">¿Cuántos Access Point posee (wifi cliente)?</label>
+              <select class="form-select" id="ap_wifi_cliente" name="ap_wifi_cliente" disabled>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            
+          </div>
+
+          <!-- Columna 3 -->
+          <div class="col-12 col-md-4">
+            
+
+            <!-- Pantallas de Promoción -->
+            <div class="mb-3">
+              <label for="pantallas_promocion" class="form-label">¿Cuántas pantallas de promoción posee?</label>
+              <select class="form-select" id="pantallas_promocion" name="pantallas_promocion">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+
+            <!-- AP Wifi Tienda -->
+            <div class="mb-3">
+              <label for="ap_wifi_tienda" class="form-label">¿Cuántos Access Point posee (uso tienda)?</label>
+              <select class="form-select" id="ap_wifi_tienda" name="ap_wifi_tienda" disabled>
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+
+             <!-- ¿Posee wifi fuera de Tienda? -->
+            <div class="mb-3">
+              <label for="wifi_fuera" class="form-label">¿Posee wifi fuera de Tienda?</label>
+              <div class="radio-group">
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_fuera_si" name="wifi_fuera" value="si" onchange="toggleSelect('ap_wifi_fuera', true)">
+                  <label for="wifi_fuera_si" class="form-label">Sí</label>
+                </div>
+                <div class="radio-inline">
+                  <input type="radio" id="wifi_fuera_no" name="wifi_fuera" value="no" onchange="toggleSelect('ap_wifi_fuera', false)">
+                  <label for="wifi_fuera_no" class="form-label">No</label>
+                </div>
+              </div>
+            </div>
+
+            
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2">
+          <button type="button" class="btn btn-secondary" onclick="ocultarFormulariosInternos()">Retroceder</button>
+          <button type="button" class="btn btn-success" disabled>Guardar</button>
+        </div>
+      </form>
+    </div>
+
+    
+  
+  
+    
+    
+      
+      
+      
+
+    </div>
+    
+    <!-- Datos Técnicos -->
+    <button class="btn btn-secondary" onclick="toggleSeccion('tecnico')">Datos Técnicos</button>
+    <div id="seccion-tecnico" class="seccion-formulario">
+      <p>Contenido de Datos Técnicos (en desarrollo).</p>
+    </div>
+
+    <!-- Procesos Críticos -->
+    <button class="btn btn-secondary" onclick="toggleSeccion('critico')">Procesos Críticos</button>
+    <div id="seccion-critico" class="seccion-formulario">
+      <p>Contenido de Procesos Críticos (en desarrollo).</p>
+    </div>
+  </div>
+</div>
+
+
+<script src="{% static 'js/comp-form.js' %}"></script>
+<script src="{% static 'js/campos-otro.js' %}"></script>
+<script src="{% static 'js/botones.js' %}"></script>
+<script src="{% static 'js/obtener_regiones.js' %}"></script>
+<script src="{% static 'js/preguntas_condicionales.js' %}"></script>
+
+</body>
+</html>
